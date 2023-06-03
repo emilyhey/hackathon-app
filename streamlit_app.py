@@ -1,9 +1,9 @@
-from tkinter import *
+import tkinter as tk
 
 def button_click():
     label.config(text="another fun fact")
     
-window = st.Tk()
+window = tk.Tk()
 window.geometry("500x150")
 frame = Frame(window, bd = 5)
 frame.pack(side = BOTTOM, anchor = S)
