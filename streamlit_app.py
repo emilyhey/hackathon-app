@@ -1,9 +1,10 @@
-import tkinter as tk
+import streamlit as st
+from tkinter import *
 
 def button_click():
     label.config(text="another fun fact")
-    
-window = tk.Tk()
+
+window = Tk()
 window.geometry("500x150")
 frame = Frame(window, bd = 5)
 frame.pack(side = BOTTOM, anchor = S)
