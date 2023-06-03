@@ -1,5 +1,5 @@
 import streamlit as st
-import Tkinter as tk
+import tkinter as tk
 
 
 def button_click():
