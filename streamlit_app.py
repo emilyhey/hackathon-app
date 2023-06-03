@@ -1,21 +1,25 @@
 import streamlit as st
+import streamlit as st
 from tkinter import *
 
+def button_click():
+    label.config(text="another fun fact")
+    
 window = Tk()
 window.geometry("500x150")
-frame = frame(window, anchor = S)
-frame.pack()
+frame = Frame(window, bd = 5)
+frame.pack(side = BOTTOM, anchor = S)
 
-leftframe = Frame(window, bg = "black", bd = "5")
+leftframe = Frame(frame, bg = "black")
 leftframe.pack(side=LEFT)
- 
-rightframe = Frame(window)
+
+rightframe = Frame(frame)
 rightframe.pack(side=RIGHT)
- 
-label = Label(frame, text = "fun fact", wraplength = 1)
+
+label = Label(frame, text = "fun fact", wraplength = 200)
 label.pack()
 
-button = Button(rightframe, text="click for another", command=button_click, font="white")
+button = Button(rightframe, text="click for another", command=button_click, fg="white", bg="black")
 button.pack()
 
 window.mainloop()
