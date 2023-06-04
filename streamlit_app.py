@@ -1,7 +1,6 @@
 import streamlit as st
-import tkinter as tk
-from tkinter import ttk
-from tkinter.messagebox import showinfo
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtWidgets import QMessageBox
 import random
 
 def button_click():
