@@ -1,7 +1,7 @@
 import streamlit as st
 import tkinter as tk
 from tkinter import ttk
-#from tkinter.messagebox import showinfo
+from tkinter.messagebox import showinfo
 import random
 
 def button_click():
@@ -131,11 +131,11 @@ def state_changed(event):
     city_dropdown = ttk.Combobox(window, textvariable=selected_city, state="readonly")
     city_dropdown.pack()
 
-# def city_changed(event):
-#     showinfo(
-#         title='Result',
-#         message=f'You selected {selected_city.get()}, {selected_state.get()}'
-#     )
+def city_changed(event):
+    showinfo(
+        title='Result',
+        message=f'You selected {selected_city.get()}, {selected_state.get()}'
+    )
 
 
 
