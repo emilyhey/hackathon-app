@@ -1,7 +1,7 @@
 import streamlit as st
-import tkinter as tk
-from tkinter import ttk
-from tkinter.messagebox import showinfo
+import _tkinter as tk
+from _tkinter import ttk
+from _tkinter.messagebox import showinfo
 import random
 
 def button_click():
