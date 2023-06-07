@@ -1,17 +1,15 @@
-import streamlit as st
+# import streamlit as st
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, font
 from tkinter.messagebox import showinfo
 import random
 
-def button_click():
-    options = ["fact", "fact1", "fact2", "fact3", "fact4"]
-    randomFact = random.choice(options)
-    label["text"] = randomFact
-
 def state_changed(event):
-    selected_city.set("")  # Clear the selected city when state changes
-    city_names=['']
+    selected_city.set('')  # Clear the selected city when state changes
+    if selected_state.get() in city_info:
+        city_names = list(city_info[selected_state.get()].keys())
+    else:
+        city_names = ['']
     if selected_state.get() == "Alabama":
         city_names = ['Birmingham', 'Montgomery', 'Mobile', 'Huntsville', 'Tuscaloosa', 'Hoover', 'Dothan', 'Auburn', 'Decatur', 'Madison']
     elif selected_state.get() == "Alaska":
@@ -115,53 +113,81 @@ def state_changed(event):
     else:
         city_names = ['']
 
-    # Update the city dropdown menu with the appropriate city names
-    city_dropdown = ttk.Combobox(search_frame, textvariable=selected_city)
-
-    # Create the state dropdown menu
-    state_label = ttk.Label(window, text="State:")
-    state_label.pack()
-    state_dropdown = ttk.Combobox(window, textvariable=selected_state, state="readonly")
-    state_dropdown.pack()
-    state_dropdown.bind("<<ComboboxSelected>>", state_changed)
-
-    # Create the city dropdown menu
-    city_label = ttk.Label(window, text="City:")
-    city_label.pack()
-    city_dropdown = ttk.Combobox(window, textvariable=selected_city, state="readonly")
-    city_dropdown.pack()
-
 def city_changed(event):
-    showinfo(
-        title='Result',
-        message=f'You selected {selected_city.get()}, {selected_state.get()}'
-    )
+    state = selected_state.get()
+    city = selected_city.get()
 
+    if state and city:
+        text_info = city_info[state][city]
+        showinfo(
+            title='Result',
+            message=f'You selected {selected_city.get()}, {selected_state.get()}'
+        )
+    else:
+        showinfo(
+            title='Result',
+            message='Please select a valid state and city.'
+        )
+
+
+def type_text(label, text, delay=100, index=0):
+    if index < len(text):
+        label.config(text=label.cget("text") + text[index])
+        index += 1
+        label.after(delay, type_text, label, text, delay, index)
+    else:
+        label.config(font=("Garamond", 18))  # Reset font to default after typing animation
+
+
+
+
+def button_click():
+    options = ["You can tell the temperature in Fahrenheit by counting a cricket's chirps in \
+15 seconds and adding 40. Crickets rub their wings in a process called stridulation. Since \
+crickets are cold blooded they take on the temperature of their surroundings, effecting how \
+quickly muscle reactions can occur leading to faster or slower chirps.", \
+"The popular manga One Piece, written by Eiichiro Oda, was originally only meant to last five \
+years. It has now been over 25.", \
+"fact2", "fact3", "fact4"]
+    randomFact = random.choice(options)
+    label.config(text="")  # Clear existing text
+    type_text(label, randomFact, delay=50)  # Start typing animation
 
 
 
 ### fun facts ###
 window = tk.Tk()
 window.geometry("1000x1000")
-frame = tk.Frame(window, width = 1000, height = 30, bg = "black", highlightbackground="white", highlightthickness=2)
+frame = tk.Frame(window, width = 1000, height = 48, bg = "black", highlightbackground="white", highlightthickness=2)
 window.configure(background="black")
 frame.pack(side="bottom", pady=40)
 
-label = tk.Label(frame, width=50, height=5, text="fun fact", font=("Comic Sans Serif",12), fg="white", wraplength=200, bg="black", anchor=tk.NW)
+label = tk.Label(frame, width=50, height=5, text="", font=("Garamond",18), fg="white", wraplength=450, bg="black", anchor=tk.NW)
+text="This box has some fun facts. For example: Carbon Dioxide is at it's highest in 2 million years, we are losing 1.2 trillion \
+tons of ice each year, and it could be too hot to live in many places by the end of the century. Read more at your own risk."
+type_text(label, text, delay=50)  # Start typing animation
 label.pack()
 
-button = tk.Button(frame, text="click for another", font=("Comic Sans MS", 11), bd=0, command=button_click, fg="white", activebackground="black", activeforeground="white")
+button = tk.Button(frame, text="click for another", font=("Comic Sans MS",11), bd=0, command=button_click, fg="white", activebackground="black", activeforeground="white")
 button.configure(highlightbackground="black", highlightcolor="black")
 button.pack(anchor = tk.S, side="right", padx=6, pady=1)
 
 
 
+### Title ###
+frame0 = tk.Frame(window, bg = "black", highlightbackground="white", highlightthickness=2)
+frame0.pack(side="top", anchor=tk.W, padx = 50, pady=40)
+
+label0 = tk.Label(frame0, text="How Safe is Your City?", font=("Garamond",28,"bold"), fg="white", bg="black", anchor=tk.NW)
+label0.pack()
+
+
 
 ### search box for states frame ###
-search_frame = tk.Frame(window, width=800, height=600, bg = "black", highlightbackground="white", highlightthickness=2)
+search_frame = tk.Frame(window, bg = "black", highlightbackground="white", highlightthickness=2)
 search_frame.pack(padx=150, pady=100, anchor=tk.N, side="left")
 
-label1 = tk.Label(search_frame, text="Please select a state:", font=("Comic Sans Serif",12), fg="white", wraplength=200, bg="black", anchor=tk.W)
+label1 = tk.Label(search_frame, text="Please select a state:", font=("Garamond",18), fg="white", wraplength=200, bg="black", anchor=tk.W)
 label1.pack(fill=tk.X)
 
 # create a combobox
@@ -177,9 +203,6 @@ state.bind('<<ComboboxSelected>>', state_changed)
 
 # place the widget
 state.pack(fill=tk.X, padx=5, pady=5)
-
-
-
 
 
 
@@ -452,6 +475,15 @@ city_info = {
 }
 
 
+
+# Create the state dropdown menu
+state_label = ttk.Label(window, text="State:")
+state_label.pack()
+state_dropdown = ttk.Combobox(window, textvariable=selected_state, state="readonly")
+state_dropdown.pack()
+state_dropdown.bind("<<ComboboxSelected>>", state_changed)
+
+
 state = selected_state.get()
 print(state)
 
@@ -462,16 +494,22 @@ if state:  # Check if both state is non-empty
     # create a combobox
     selected_city = tk.StringVar()
 
+    # Create the city dropdown menu
+    city_label = ttk.Label(window, text="City:")
+    city_label.pack()
+    city_dropdown = ttk.Combobox(window, textvariable=selected_city, state="readonly")
+    city_dropdown.pack()
+
     ### search box for cities frame ###
     search_frame1 = tk.Frame(window, width=800, height=600, bg = "black", highlightbackground="white", highlightthickness=2)
     search_frame1.pack(padx=150, pady=100, anchor=tk.N, side="right")
 
-    label2 = tk.Label(search_frame1, text="Please select a city:", font=("Comic Sans Serif",12), fg="white", wraplength=200, bg="black", anchor=tk.W)
+    label2 = tk.Label(search_frame1, text="Please select a city:", font=("Garamond",18), fg="white", wraplength=200, bg="black", anchor=tk.W)
     label2.pack(fill=tk.X)
 
     # drop down box
     city = ttk.Combobox(search_frame1, textvariable=selected_city)
-    city['values'] = list(city_names)
+    city['values'] = city_names
 
     # place the widget
     city.pack(fill=tk.X, padx=5, pady=5)
@@ -492,5 +530,11 @@ if state:  # Check if both state is non-empty
     #     print(text_info)
 else:
     print("Invalid state selected")
+
+
+# Update the city dropdown menu with the appropriate city names
+city_dropdown = ttk.Combobox(search_frame, textvariable=selected_city)
+
+
 
 window.mainloop()
